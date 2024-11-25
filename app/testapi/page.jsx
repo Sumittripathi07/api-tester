@@ -5,16 +5,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-
+// import { Spinner } from "@chakra-ui/react";
 export default function APITester() {
   const [url, setUrl] = useState("");
   const [method, setMethod] = useState("GET");
   const [headers, setHeaders] = useState("{}");
   const [body, setBody] = useState("{}");
   const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [responseDetails, setResponseDetails] = useState({
+    status: null,
+    time: null,
+    size: null,
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setResponse(null);
+    setResponseDetails({ status: null, time: null, size: null });
+
+    const startTime = performance.now();
     try {
       const parsedHeaders = JSON.parse(headers || "{}");
       const parsedBody = JSON.parse(body || "{}");
@@ -23,10 +34,30 @@ export default function APITester() {
         headers: parsedHeaders,
         body: method !== "GET" ? JSON.stringify(parsedBody) : undefined,
       });
-      const data = await res.json();
-      setResponse(data);
+      const endTime = performance.now();
+
+      const responseData = await res.json();
+      const size = new TextEncoder().encode(
+        JSON.stringify(responseData)
+      ).length;
+
+      setResponse(responseData);
+      setResponseDetails({
+        status: res.status,
+        time: Math.round(endTime - startTime),
+        size,
+      });
     } catch (error) {
       setResponse({ error: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCopy = () => {
+    if (response) {
+      navigator.clipboard.writeText(JSON.stringify(response, null, 2));
+      alert("Response copied to clipboard!");
     }
   };
 
@@ -39,7 +70,7 @@ export default function APITester() {
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <h1 className="mb-4 text-3xl font-extrabold text-center text-gray-900">
-          🌐 Animated API Tester
+          🌐 API Tester
         </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <Card className="p-4 border shadow-md">
@@ -52,6 +83,7 @@ export default function APITester() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               className="mt-1"
+              required
             />
           </Card>
 
@@ -105,7 +137,7 @@ export default function APITester() {
               type="submit"
               className="px-6 py-2 font-bold text-white bg-indigo-600 rounded-lg shadow-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-400"
             >
-              Send Request 🚀
+              {loading ? "LOADING>......" : "Send Request 🚀"}
             </Button>
           </motion.div>
         </form>
@@ -117,8 +149,34 @@ export default function APITester() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <h2 className="text-lg font-bold text-gray-800">Response:</h2>
-            <pre className="text-sm text-gray-600">
+            {/* <h2 className="text-lg font-bold text-gray-800">Response:</h2>
+            <pre className="mb-4 text-sm text-gray-600">
+              {JSON.stringify(response, null, 2)}
+            </pre> */}
+            <div className="flex items-center justify-between">
+              <div className="text-sm">
+                <p>
+                  <strong>Status:</strong> {responseDetails.status || "N/A"}
+                </p>
+                <p>
+                  <strong>Time:</strong> {responseDetails.time} ms
+                </p>
+                <p>
+                  <strong>Size:</strong> {responseDetails.size} bytes
+                </p>
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={handleCopy}
+                className="px-4 py-2 text-white bg-indigo-600 rounded-lg shadow-md hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-400"
+              >
+                Copy Response 📋
+              </motion.button>
+            </div>
+            <h2 className="mt-10 text-lg font-bold text-gray-800">Response:</h2>
+            <pre className="mb-4 text-sm text-gray-600">
               {JSON.stringify(response, null, 2)}
             </pre>
           </motion.div>
