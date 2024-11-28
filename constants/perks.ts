@@ -6,12 +6,12 @@ export const PERKS = [
     {
         icon: ZapIcon,
         title: "Fast and Efficient",
-        description: "Experience quick and seamless content creation with our optimized AI tools."
+        description: "Experience quick and seamless response."
     },
     {
         icon: ChartSplineIcon,
-        title: "Insightful Analytics",
-        description: "Gain valuable insights and analytics to enhance your social media strategy."
+        title: "Response Time Tracking",
+        description: "Measure the time taken to process requests and responses in milliseconds."
     },
     {
         icon: LifeBuoyIcon,
@@ -20,8 +20,8 @@ export const PERKS = [
     },
     {
         icon: PaletteIcon,
-        title: "Customizable Solutions",
-        description: "Tailor the tools and features to fit your unique social media needs."
+        title: "Dynamic Request Body",
+        description: "Support for raw JSON, form data, and other payload formats for POST and PUT requests."
     },
     {
         icon: ShieldCheckIcon,
@@ -30,7 +30,7 @@ export const PERKS = [
     },
     {
         icon: WaypointsIcon,
-        title: "Seamless Integration",
-        description: "Easily integrate with your existing social media platforms and tools."
+        title: "HTTP Methods Support",
+        description: "Test all major HTTP methods, including GET, POST, PUT, DELETE, PATCH, and more."
     },
 ];

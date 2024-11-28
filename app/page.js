@@ -29,7 +29,7 @@ export default function Home() {
         <Connect />
         <Features />
         <Perks />
-        <Pricing />
+        {/* <Pricing /> */}
         <Reviews />
         <CTA />
       </Wrapper>

@@ -5,9 +5,10 @@ import Providers from "@/components/global/providers";
 import { cn, generateMetadata } from "@/functions";
 import { inter, satoshi } from "@/constants";
 import { Toaster } from "@/components/ui/sonner";
+import Footer from "@/components/marketing/footer";
 
 export const metadata = {
-  title: "Api-Tester",
+  title: "RapidReq",
   description: "Test your apis!",
 };
 
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
           />
           <Navbar />
           <main className="relative z-40 w-full mx-auto">{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>
