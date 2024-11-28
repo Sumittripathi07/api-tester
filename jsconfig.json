@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "ESNext",
+    "baseUrl": ".",
     "moduleResolution": "Bundler",
     "skipLibCheck": true,
     "paths": {
